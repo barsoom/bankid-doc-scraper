@@ -1,0 +1,9 @@
+{
+  "name": "bankid-docs-scraper",
+  "version": "1.0.0",
+  "description": "BankID documentation scraper using Playwright",
+  "private": true,
+  "devDependencies": {
+    "playwright": "^1.44.0"
+  }
+}

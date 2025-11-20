@@ -1,1 +1,4 @@
 .worktrees/
+vendor/
+.bundle/
+node_modules/
