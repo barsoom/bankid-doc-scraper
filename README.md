@@ -30,22 +30,17 @@ Perfect for:
 
 ## Installation
 
-1. **Clone or navigate to the project directory:**
-   ```bash
-   cd bankid
-   ```
-
-2. **Install Ruby dependencies:**
+1. **Install Ruby dependencies:**
    ```bash
    bundle install --path vendor/bundle
    ```
 
-3. **Install Node.js dependencies:**
+2. **Install Node.js dependencies:**
    ```bash
    npm install
    ```
 
-4. **Install Playwright browsers:**
+3. **Install Playwright browsers:**
    ```bash
    npx playwright install chromium
    ```
