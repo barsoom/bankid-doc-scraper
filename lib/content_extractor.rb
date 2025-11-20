@@ -4,6 +4,9 @@ require 'uri'
 
 class ContentExtractor
   CONTENT_SELECTORS = [
+    # BankID-specific selectors (React app)
+    '.react-root',
+    # Generic documentation selectors
     'article',
     'main',
     '[role="main"]',
@@ -20,6 +23,12 @@ class ContentExtractor
     '.sidebar',
     '.navigation',
     'button',
+    'script',
+    'style',
+    # BankID-specific
+    '[data-testid="CookieBanner"]',
+    '[data-testid="DesktopSidebar"]',
+    '[data-testid="SearchBox"]',
     '.cookie-banner'
   ].freeze
 
