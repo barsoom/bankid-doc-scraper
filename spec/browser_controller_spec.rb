@@ -5,13 +5,14 @@ RSpec.describe BrowserController do
     it 'creates a browser controller with headless mode by default' do
       controller = BrowserController.new
       expect(controller).to be_a(BrowserController)
+      expect(controller.page).not_to be_nil
       controller.cleanup
     end
 
-    it 'accepts headless option' do
-      # Note: headed mode requires X server, so we just test it accepts the param
+    it 'creates a browser controller with explicit headless mode' do
       controller = BrowserController.new(headless: true)
       expect(controller).to be_a(BrowserController)
+      expect(controller.page).not_to be_nil
       controller.cleanup
     end
   end
