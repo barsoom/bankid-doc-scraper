@@ -61,6 +61,9 @@ class BankIDScraper
     stats = @crawler.stats
     puts "[#{stats[:visited] + 1}/#{stats[:total]}] Processing: #{url}"
 
+    max_retries = 3
+    retry_count = 0
+
     begin
       # Navigate and wait for content
       @browser.navigate_and_wait(url)
@@ -96,6 +99,19 @@ class BankIDScraper
       @success_count += 1
       @crawler.mark_visited(url)
 
+    rescue Playwright::TimeoutError, Playwright::Error => e
+      retry_count += 1
+      if retry_count <= max_retries
+        wait_time = 2 ** (retry_count - 1)
+        puts "  ⚠️  Retry #{retry_count}/#{max_retries} after #{wait_time}s..."
+        sleep wait_time
+        retry
+      else
+        puts "  ✗ Failed after #{max_retries} retries: #{e.message}"
+        @organizer.save_failed_url(url, "#{e.class}: #{e.message}")
+        @failure_count += 1
+        @crawler.mark_visited(url)
+      end
     rescue StandardError => e
       puts "  ✗ Error: #{e.message}"
       @organizer.save_failed_url(url, e.message)
