@@ -1,6 +1,7 @@
 require 'net/http'
 require 'uri'
 require 'digest'
+require 'fileutils'
 
 class ImageDownloader
   IMAGE_EXTENSIONS = %w[.png .jpg .jpeg .gif .svg .webp .ico .avif].freeze
