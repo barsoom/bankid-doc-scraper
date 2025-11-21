@@ -1,3 +1,4 @@
+require 'spec_helper'
 require_relative '../lib/file_organizer'
 require 'tmpdir'
 require 'fileutils'

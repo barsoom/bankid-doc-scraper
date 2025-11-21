@@ -1,4 +1,5 @@
 # spec/image_downloader_spec.rb
+require 'spec_helper'
 require_relative '../lib/image_downloader'
 require 'tmpdir'
 require 'webmock/rspec'

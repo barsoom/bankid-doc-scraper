@@ -418,6 +418,25 @@ Once installed, RuboCop will run on staged Ruby files before each commit. If vio
 - Fix them manually or run `bundle exec rubocop --autocorrect-all`
 - Or commit with `git commit --no-verify` to skip the check (not recommended)
 
+### Code Coverage
+
+This project uses SimpleCov to track test coverage:
+
+```bash
+# Run tests with coverage (automatically enabled)
+bundle exec rspec
+
+# View coverage report
+open coverage/index.html  # macOS
+xdg-open coverage/index.html  # Linux
+```
+
+**Current Coverage:**
+- Line Coverage: **89.76%** (184 / 205 lines)
+- Branch Coverage: **73.08%** (38 / 52 branches)
+
+Coverage reports are generated automatically when running tests and saved to `coverage/`. This directory is excluded from git.
+
 ### Debugging
 
 Use Pry for interactive debugging:

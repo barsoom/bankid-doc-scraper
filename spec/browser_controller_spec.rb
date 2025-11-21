@@ -1,3 +1,4 @@
+require 'spec_helper'
 require_relative '../lib/browser_controller'
 
 RSpec.describe BrowserController do

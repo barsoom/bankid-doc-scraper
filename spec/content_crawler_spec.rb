@@ -1,4 +1,5 @@
 # spec/content_crawler_spec.rb
+require 'spec_helper'
 require_relative '../lib/content_crawler'
 
 RSpec.describe ContentCrawler do

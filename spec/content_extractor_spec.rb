@@ -1,4 +1,5 @@
 # spec/content_extractor_spec.rb
+require 'spec_helper'
 require_relative '../lib/content_extractor'
 require 'nokogiri'
 

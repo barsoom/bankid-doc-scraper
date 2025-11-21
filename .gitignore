@@ -4,3 +4,4 @@ vendor/
 node_modules/
 bankid_docs/
 test_output/
+coverage/

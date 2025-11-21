@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # Pre-commit hook to run RuboCop linter
 
-set -e
-
 echo "Running RuboCop..."
 
 # Get list of staged Ruby files
@@ -13,11 +11,11 @@ if [ -z "$STAGED_FILES" ]; then
   exit 0
 fi
 
-# Run RuboCop on staged files
-bundle exec rubocop $STAGED_FILES
+# Run RuboCop on staged files, suppress warnings, only check for offenses
+bundle exec rubocop $STAGED_FILES 2>&1 | grep -v "^Warning:" | grep -E "(offense|^Inspecting|^$|^RSpec)" || true
 
-# If RuboCop fails, offer to auto-fix
-if [ $? -ne 0 ]; then
+# Check if RuboCop found offenses by checking exit code of the actual rubocop command
+if ! bundle exec rubocop $STAGED_FILES --format quiet 2>/dev/null; then
   echo ""
   echo "RuboCop found violations. Run 'bundle exec rubocop --autocorrect-all' to fix."
   echo "Or commit with --no-verify to skip this check (not recommended)."

@@ -1,4 +1,5 @@
 # spec/markdown_converter_spec.rb
+require 'spec_helper'
 require_relative '../lib/markdown_converter'
 
 RSpec.describe MarkdownConverter do
