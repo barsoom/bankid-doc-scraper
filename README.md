@@ -15,6 +15,7 @@ Perfect for:
 - ✅ **Sitemap-Based Discovery** - Efficient URL discovery using the site's sitemap.xml
 - ✅ **Smart Content Extraction** - Removes navigation, sidebars, and other non-content elements
 - ✅ **Clean Markdown Output** - Converts HTML to readable Markdown with proper formatting
+- ✅ **Image Downloading** - Automatically downloads and embeds images locally
 - ✅ **Metadata Headers** - Each file includes source URL and download timestamp
 - ✅ **Rate Limiting** - Random delays (2-5s) between requests to be respectful
 - ✅ **Automatic Retry** - Exponential backoff retry logic for failed requests
@@ -104,6 +105,10 @@ The scraper creates:
 ```
 bankid_docs/
 ├── INDEX.md                          # Table of contents with all pages
+├── images/                           # Downloaded images
+│   ├── a1f618f904c8-logo-bank-id.svg
+│   ├── 8e63ea1e92f1-flow-light-app.png
+│   └── ...
 ├── getting-started.md
 ├── getting-started/
 │   ├── introduction.md
@@ -344,7 +349,6 @@ The BankID documentation is publicly available, and this tool simply automates d
 
 - **JavaScript-only content:** Requires full browser rendering (slower than simple HTTP requests)
 - **Dynamic content:** Some interactive elements may not render perfectly in Markdown
-- **Images:** Image paths are preserved but images themselves are not downloaded
 - **Rate limiting:** 2-5s delays mean full scrape takes ~5 minutes for 69 pages
 - **BankID-specific:** Selectors are tuned for developers.bankid.com structure
 
@@ -352,7 +356,7 @@ The BankID documentation is publicly available, and this tool simply automates d
 
 Potential improvements:
 
-- [ ] Download and embed images locally
+- [x] Download and embed images locally (✅ Implemented)
 - [ ] Support for multiple output formats (PDF, HTML, etc.)
 - [ ] Incremental updates (only fetch changed pages)
 - [ ] Parallel page processing

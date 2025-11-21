@@ -9,6 +9,7 @@ require_relative 'lib/content_crawler'
 require_relative 'lib/content_extractor'
 require_relative 'lib/markdown_converter'
 require_relative 'lib/file_organizer'
+require_relative 'lib/image_downloader'
 
 class BankIDScraper
   DEFAULT_BASE_URL = 'https://developers.bankid.com/'
@@ -27,7 +28,8 @@ class BankIDScraper
     @browser = BrowserController.new(headless: @headless)
     @crawler = ContentCrawler.new(@base_url, max_pages: @max_pages)
     @extractor = ContentExtractor.new
-    @converter = MarkdownConverter.new
+    @image_downloader = ImageDownloader.new(@base_url, @output_dir)
+    @converter = MarkdownConverter.new(image_downloader: @image_downloader)
     @organizer = FileOrganizer.new(@output_dir)
 
     @success_count = 0
@@ -215,6 +217,7 @@ class BankIDScraper
     duration = Time.now - @start_time
     minutes = (duration / 60).to_i
     seconds = (duration % 60).to_i
+    image_stats = @image_downloader.stats
 
     puts
     puts "=" * 60
@@ -226,6 +229,7 @@ class BankIDScraper
     if @failure_count > 0
       puts "  (see #{File.join(@output_dir, 'failed_urls.txt')})"
     end
+    puts "Images downloaded: #{image_stats[:total]}"
     puts "Duration: #{minutes}m #{seconds}s"
     puts "Output: #{@output_dir}"
     puts "=" * 60
