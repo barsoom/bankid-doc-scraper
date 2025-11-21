@@ -3,7 +3,7 @@ require_relative '../lib/content_extractor'
 require 'nokogiri'
 
 RSpec.describe ContentExtractor do
-  let(:extractor) { ContentExtractor.new }
+  let(:extractor) { described_class.new }
 
   describe '#extract_content' do
     it 'extracts content from main tag' do
@@ -74,7 +74,7 @@ RSpec.describe ContentExtractor do
 
   describe '#validate_content' do
     it 'returns true for valid content' do
-      content = '<h1>Title</h1><p>' + 'x' * 150 + '</p>'
+      content = "<h1>Title</h1><p>#{'x' * 150}</p>"
       expect(extractor.validate_content(content)).to be true
     end
 
@@ -84,7 +84,7 @@ RSpec.describe ContentExtractor do
     end
 
     it 'returns false for content without headings' do
-      content = '<p>' + 'x' * 150 + '</p>'
+      content = "<p>#{'x' * 150}</p>"
       expect(extractor.validate_content(content)).to be false
     end
   end

@@ -1,6 +1,5 @@
 # lib/content_crawler.rb
 require 'uri'
-require 'set'
 
 class ContentCrawler
   def initialize(base_url, max_pages: nil)

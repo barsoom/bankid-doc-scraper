@@ -6,15 +6,15 @@ require 'webmock/rspec'
 RSpec.describe ImageDownloader do
   let(:base_url) { 'https://developers.bankid.com' }
   let(:output_dir) { Dir.mktmpdir }
-  let(:downloader) { ImageDownloader.new(base_url, output_dir) }
+  let(:downloader) { described_class.new(base_url, output_dir) }
 
   after do
-    FileUtils.rm_rf(output_dir) if File.exist?(output_dir)
+    FileUtils.rm_rf(output_dir)
   end
 
   describe '#initialize' do
     it 'creates images directory' do
-      downloader  # Force lazy-evaluation
+      downloader # Force lazy-evaluation
       expect(File.directory?(File.join(output_dir, 'images'))).to be true
     end
 
@@ -30,8 +30,8 @@ RSpec.describe ImageDownloader do
 
       result = downloader.download_and_get_local_path('/assets/logo.png', base_url)
 
-      expect(result).to_not be_nil
-      expect(result).to match(/^images\/.*\.png$/)
+      expect(result).not_to be_nil
+      expect(result).to match(%r{^images/.*\.png$})
     end
 
     it 'downloads image and returns local path' do
@@ -41,7 +41,7 @@ RSpec.describe ImageDownloader do
 
       result = downloader.download_and_get_local_path(image_url, base_url)
 
-      expect(result).to_not be_nil
+      expect(result).not_to be_nil
       expect(result).to start_with('images/')
       expect(result).to end_with('.png')
       expect(File.exist?(File.join(output_dir, result))).to be true
@@ -82,7 +82,7 @@ RSpec.describe ImageDownloader do
 
       result = downloader.download_and_get_local_path(image_url, base_url)
 
-      expect(result).to_not be_nil
+      expect(result).not_to be_nil
       expect(result).to end_with('.svg')
     end
 
@@ -92,7 +92,7 @@ RSpec.describe ImageDownloader do
       stub_request(:get, image_url)
         .to_return(status: 200, body: 'image data')
 
-      result = downloader.download_and_get_local_path(image_url, base_url)
+      downloader.download_and_get_local_path(image_url, base_url)
 
       # Should at least attempt to download
       expect(WebMock).to have_requested(:get, image_url)
@@ -130,7 +130,7 @@ RSpec.describe ImageDownloader do
       result = downloader.download_and_get_local_path('https://developers.bankid.com/logo.png', base_url)
 
       # Should have format: images/[hash]-logo.png
-      expect(result).to match(/^images\/[a-f0-9]{12}-logo\.png$/)
+      expect(result).to match(%r{^images/[a-f0-9]{12}-logo\.png$})
     end
 
     it 'generates different filenames for different URLs' do
@@ -142,7 +142,7 @@ RSpec.describe ImageDownloader do
       result1 = downloader.download_and_get_local_path('https://developers.bankid.com/logo1.png', base_url)
       result2 = downloader.download_and_get_local_path('https://developers.bankid.com/logo2.png', base_url)
 
-      expect(result1).to_not eq(result2)
+      expect(result1).not_to eq(result2)
     end
   end
 end

@@ -54,7 +54,7 @@ class FileOrganizer
     return 'index.md' if path == '/' || path.empty?
 
     # Remove leading slash
-    path = path[1..-1] if path.start_with?('/')
+    path = path[1..] if path.start_with?('/')
 
     # Add .md extension if not present
     path += '.md' unless path.end_with?('.md')

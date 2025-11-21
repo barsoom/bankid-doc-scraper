@@ -50,7 +50,7 @@ class BrowserController
 
     # Then wait for actual content to be visible
     @page.wait_for_selector(selector, state: 'visible', timeout: 15_000)
-  rescue Playwright::TimeoutError => e
+  rescue Playwright::TimeoutError
     # Fallback: wait a bit more and try body
     sleep 2
     @page.wait_for_selector('body', state: 'visible', timeout: 5_000)

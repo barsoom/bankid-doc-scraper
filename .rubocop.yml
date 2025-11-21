@@ -1,0 +1,61 @@
+require:
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  Exclude:
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+    - 'bankid_docs/**/*'
+
+# Use idiomatic Ruby style
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# Documentation not required for small projects
+Style/Documentation:
+  Enabled: false
+
+# Allow longer lines for readability (e.g., long User-Agent strings)
+Layout/LineLength:
+  Max: 160
+
+# Allow longer methods for main orchestration code
+Metrics/MethodLength:
+  Max: 40
+
+# Allow longer classes for main components
+Metrics/ClassLength:
+  Max: 200
+
+# Allow more complex methods
+Metrics/AbcSize:
+  Max: 40
+
+Metrics/CyclomaticComplexity:
+  Max: 12
+
+Metrics/PerceivedComplexity:
+  Max: 12
+
+# Allow rescue StandardError
+Style/RescueStandardError:
+  EnforcedStyle: implicit
+
+# validate_content doesn't need to end with ?
+Naming/PredicateMethod:
+  Enabled: false
+
+# RSpec-specific configs
+RSpec/ExampleLength:
+  Max: 15
+
+RSpec/MultipleExpectations:
+  Max: 5
+
+RSpec/NestedGroups:
+  Max: 5

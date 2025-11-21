@@ -4,7 +4,7 @@ require 'fileutils'
 
 RSpec.describe FileOrganizer do
   let(:output_dir) { Dir.mktmpdir }
-  let(:organizer) { FileOrganizer.new(output_dir) }
+  let(:organizer) { described_class.new(output_dir) }
 
   after { FileUtils.rm_rf(output_dir) }
 

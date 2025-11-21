@@ -3,22 +3,22 @@ require_relative '../lib/browser_controller'
 RSpec.describe BrowserController do
   describe '#initialize' do
     it 'creates a browser controller with headless mode by default' do
-      controller = BrowserController.new
-      expect(controller).to be_a(BrowserController)
+      controller = described_class.new
+      expect(controller).to be_a(described_class)
       expect(controller.page).not_to be_nil
       controller.cleanup
     end
 
     it 'creates a browser controller with explicit headless mode' do
-      controller = BrowserController.new(headless: true)
-      expect(controller).to be_a(BrowserController)
+      controller = described_class.new(headless: true)
+      expect(controller).to be_a(described_class)
       expect(controller.page).not_to be_nil
       controller.cleanup
     end
   end
 
   describe '#navigate_and_wait' do
-    let(:controller) { BrowserController.new(headless: true) }
+    let(:controller) { described_class.new(headless: true) }
 
     after { controller.cleanup }
 
@@ -30,7 +30,7 @@ RSpec.describe BrowserController do
 
   describe '#cleanup' do
     it 'closes browser and stops playwright' do
-      controller = BrowserController.new
+      controller = described_class.new
       expect { controller.cleanup }.not_to raise_error
     end
   end

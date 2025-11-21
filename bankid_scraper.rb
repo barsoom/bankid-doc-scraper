@@ -12,9 +12,9 @@ require_relative 'lib/file_organizer'
 require_relative 'lib/image_downloader'
 
 class BankIDScraper
-  DEFAULT_BASE_URL = 'https://developers.bankid.com/'
-  DEFAULT_OUTPUT_DIR = './bankid_docs'
-  SITEMAP_URL = 'https://developers.bankid.com/sitemap.xml'
+  DEFAULT_BASE_URL = 'https://developers.bankid.com/'.freeze
+  DEFAULT_OUTPUT_DIR = './bankid_docs'.freeze
+  SITEMAP_URL = 'https://developers.bankid.com/sitemap.xml'.freeze
   MIN_DELAY = 2  # seconds
   MAX_DELAY = 5  # seconds
 
@@ -38,7 +38,7 @@ class BankIDScraper
   end
 
   def run
-    puts "Starting BankID documentation scraper..."
+    puts 'Starting BankID documentation scraper...'
     puts "Base URL: #{@base_url}"
     puts "Output: #{@output_dir}"
     puts "Mode: #{@headless ? 'headless' : 'headed'}"
@@ -61,11 +61,11 @@ class BankIDScraper
         process_page_without_crawling(url)
 
         # Add human-like delay between requests (except for last one)
-        if index < urls.length - 1
-          delay = rand(MIN_DELAY..MAX_DELAY)
-          puts "  ⏱  Waiting #{delay}s before next request..."
-          sleep delay
-        end
+        next unless index < urls.length - 1
+
+        delay = rand(MIN_DELAY..MAX_DELAY)
+        puts "  ⏱  Waiting #{delay}s before next request..."
+        sleep delay
       end
     else
       # Original crawling approach
@@ -86,15 +86,15 @@ class BankIDScraper
 
   def fetch_sitemap_urls
     puts "Fetching sitemap from #{SITEMAP_URL}..."
-    xml = URI.open(SITEMAP_URL).read
+    xml = URI.parse(SITEMAP_URL).open.read
     doc = Nokogiri::XML(xml)
 
     urls = doc.xpath('//xmlns:loc').map(&:text)
     puts "  ✓ Loaded #{urls.length} URLs from sitemap"
     urls
-  rescue StandardError => e
+  rescue => e
     puts "  ✗ Error fetching sitemap: #{e.message}"
-    puts "  Falling back to base URL"
+    puts '  Falling back to base URL'
     [@base_url]
   end
 
@@ -121,9 +121,7 @@ class BankIDScraper
       content_html = @extractor.extract_content(doc)
 
       # Validate content
-      unless @extractor.validate_content(content_html)
-        puts "  ⚠️  Warning: Content validation failed, saving anyway"
-      end
+      puts '  ⚠️  Warning: Content validation failed, saving anyway' unless @extractor.validate_content(content_html)
 
       # Convert to markdown
       markdown = @converter.convert(content_html, url, Time.now)
@@ -141,11 +139,10 @@ class BankIDScraper
       puts "  ✓ Saved (found #{new_links} new links)"
       @success_count += 1
       @crawler.mark_visited(url)
-
     rescue Playwright::TimeoutError, Playwright::Error => e
       retry_count += 1
       if retry_count <= max_retries
-        wait_time = 2 ** (retry_count - 1)
+        wait_time = 2**(retry_count - 1)
         puts "  ⚠️  Retry #{retry_count}/#{max_retries} after #{wait_time}s..."
         sleep wait_time
         retry
@@ -155,7 +152,7 @@ class BankIDScraper
         @failure_count += 1
         @crawler.mark_visited(url)
       end
-    rescue StandardError => e
+    rescue => e
       puts "  ✗ Error: #{e.message}"
       @organizer.save_failed_url(url, e.message)
       @failure_count += 1
@@ -181,9 +178,7 @@ class BankIDScraper
       content_html = @extractor.extract_content(doc)
 
       # Validate content
-      unless @extractor.validate_content(content_html)
-        puts "  ⚠️  Warning: Content validation failed, saving anyway"
-      end
+      puts '  ⚠️  Warning: Content validation failed, saving anyway' unless @extractor.validate_content(content_html)
 
       # Convert to markdown
       markdown = @converter.convert(content_html, url, Time.now)
@@ -191,13 +186,12 @@ class BankIDScraper
       # Save to file
       @organizer.save_page(url, markdown)
 
-      puts "  ✓ Saved"
+      puts '  ✓ Saved'
       @success_count += 1
-
     rescue Playwright::TimeoutError, Playwright::Error => e
       retry_count += 1
       if retry_count <= max_retries
-        wait_time = 2 ** (retry_count - 1)
+        wait_time = 2**(retry_count - 1)
         puts "  ⚠️  Retry #{retry_count}/#{max_retries} after #{wait_time}s..."
         sleep wait_time
         retry
@@ -206,7 +200,7 @@ class BankIDScraper
         @organizer.save_failed_url(url, "#{e.class}: #{e.message}")
         @failure_count += 1
       end
-    rescue StandardError => e
+    rescue => e
       puts "  ✗ Error: #{e.message}"
       @organizer.save_failed_url(url, e.message)
       @failure_count += 1
@@ -220,46 +214,44 @@ class BankIDScraper
     image_stats = @image_downloader.stats
 
     puts
-    puts "=" * 60
-    puts "Download Complete!"
-    puts "=" * 60
+    puts '=' * 60
+    puts 'Download Complete!'
+    puts '=' * 60
     puts "Total pages: #{@success_count + @failure_count}"
     puts "Successful: #{@success_count}"
     puts "Failed: #{@failure_count}"
-    if @failure_count > 0
-      puts "  (see #{File.join(@output_dir, 'failed_urls.txt')})"
-    end
+    puts "  (see #{File.join(@output_dir, 'failed_urls.txt')})" if @failure_count.positive?
     puts "Images downloaded: #{image_stats[:total]}"
     puts "Duration: #{minutes}m #{seconds}s"
     puts "Output: #{@output_dir}"
-    puts "=" * 60
+    puts '=' * 60
   end
 end
 
 # CLI
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   options = {}
 
   OptionParser.new do |opts|
-    opts.banner = "Usage: ruby bankid_scraper.rb [options]"
+    opts.banner = 'Usage: ruby bankid_scraper.rb [options]'
 
-    opts.on("--[no-]headless", "Run browser in headless mode (default: true)") do |v|
+    opts.on('--[no-]headless', 'Run browser in headless mode (default: true)') do |v|
       options[:headless] = v
     end
 
-    opts.on("--output-dir DIR", "Output directory (default: ./bankid_docs)") do |v|
+    opts.on('--output-dir DIR', 'Output directory (default: ./bankid_docs)') do |v|
       options[:output_dir] = v
     end
 
-    opts.on("--base-url URL", "Starting URL (default: https://developers.bankid.com/)") do |v|
+    opts.on('--base-url URL', 'Starting URL (default: https://developers.bankid.com/)') do |v|
       options[:base_url] = v
     end
 
-    opts.on("--max-pages N", Integer, "Maximum pages to download") do |v|
+    opts.on('--max-pages N', Integer, 'Maximum pages to download') do |v|
       options[:max_pages] = v
     end
 
-    opts.on("-h", "--help", "Show this help") do
+    opts.on('-h', '--help', 'Show this help') do
       puts opts
       exit
     end

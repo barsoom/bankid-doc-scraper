@@ -3,11 +3,11 @@ require_relative '../lib/content_crawler'
 
 RSpec.describe ContentCrawler do
   let(:base_url) { 'https://developers.bankid.com' }
-  let(:crawler) { ContentCrawler.new(base_url) }
+  let(:crawler) { described_class.new(base_url) }
 
   describe '#initialize' do
     it 'creates crawler with base URL' do
-      expect(crawler).to be_a(ContentCrawler)
+      expect(crawler).to be_a(described_class)
     end
   end
 

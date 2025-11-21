@@ -2,7 +2,7 @@
 require_relative '../lib/markdown_converter'
 
 RSpec.describe MarkdownConverter do
-  let(:converter) { MarkdownConverter.new }
+  let(:converter) { described_class.new }
 
   describe '#convert' do
     it 'converts HTML to markdown' do

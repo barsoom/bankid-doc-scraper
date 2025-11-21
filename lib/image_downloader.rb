@@ -5,7 +5,7 @@ require 'fileutils'
 
 class ImageDownloader
   IMAGE_EXTENSIONS = %w[.png .jpg .jpeg .gif .svg .webp .ico .avif].freeze
-  IMAGES_DIR = 'images'
+  IMAGES_DIR = 'images'.freeze
 
   def initialize(base_url, output_dir)
     @base_url = base_url
@@ -43,7 +43,7 @@ class ImageDownloader
       @downloaded_images[absolute_url] = local_path
 
       local_path
-    rescue StandardError => e
+    rescue => e
       puts "  ⚠️  Failed to download image #{absolute_url}: #{e.message}"
       nil
     end
@@ -92,8 +92,9 @@ class ImageDownloader
     end
 
     return nil unless response.code == '200'
+
     response.body
-  rescue StandardError => e
+  rescue => e
     puts "  ⚠️  Error downloading #{url}: #{e.class} - #{e.message}"
     nil
   end
@@ -110,7 +111,7 @@ class ImageDownloader
     url_hash = Digest::SHA256.hexdigest(url)[0..11]
 
     # If we have a good filename, use it with hash prefix
-    if original_name.length > 0 && original_name != '/'
+    if original_name.length.positive? && original_name != '/'
       base_name = File.basename(original_name, extension)
       "#{url_hash}-#{base_name}#{extension}"
     else
