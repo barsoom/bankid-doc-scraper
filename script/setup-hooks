@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Setup git hooks for the project
+
+set -e
+
+HOOK_DIR=".git/hooks"
+SOURCE_DIR=".git-hooks"
+
+echo "Setting up git hooks..."
+
+# Create hooks directory if it doesn't exist
+mkdir -p "$HOOK_DIR"
+
+# Link pre-commit hook
+if [ -f "$SOURCE_DIR/pre-commit" ]; then
+  ln -sf "../../$SOURCE_DIR/pre-commit" "$HOOK_DIR/pre-commit"
+  chmod +x "$HOOK_DIR/pre-commit"
+  echo "✓ Pre-commit hook installed"
+else
+  echo "✗ Pre-commit hook not found in $SOURCE_DIR"
+  exit 1
+fi
+
+echo ""
+echo "Git hooks successfully installed!"
+echo "RuboCop will run automatically before each commit."
+echo ""
+echo "To skip the hook on a commit, use: git commit --no-verify"

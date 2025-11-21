@@ -370,9 +370,11 @@ This is a personal project, but suggestions and improvements are welcome:
 
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes with tests
-4. Run the test suite: `bundle exec rspec`
-5. Submit a pull request
+3. Install git hooks: `script/setup-hooks`
+4. Make your changes with tests
+5. Run the test suite: `bundle exec rspec`
+6. Run the linter: `bundle exec rubocop`
+7. Submit a pull request
 
 ## Development
 
@@ -388,6 +390,33 @@ bundle exec rspec spec/browser_controller_spec.rb
 # With documentation format
 bundle exec rspec --format documentation
 ```
+
+### Code Quality
+
+This project uses RuboCop for linting and code style enforcement.
+
+```bash
+# Run linter
+bundle exec rubocop
+
+# Auto-fix violations
+bundle exec rubocop --autocorrect-all
+
+# Check specific files
+bundle exec rubocop lib/browser_controller.rb
+```
+
+**Git Hooks:**
+
+Install git hooks to automatically run RuboCop before commits:
+
+```bash
+script/setup-hooks
+```
+
+Once installed, RuboCop will run on staged Ruby files before each commit. If violations are found:
+- Fix them manually or run `bundle exec rubocop --autocorrect-all`
+- Or commit with `git commit --no-verify` to skip the check (not recommended)
 
 ### Debugging
 
